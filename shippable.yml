@@ -1,0 +1,12 @@
+build_image: edemo/pdengine:docker_java11
+language: python
+python:
+  - 2.7
+
+build:
+  ci:
+    - tools/script
+  on_success:
+    - tools/publish
+  on_failure:
+    - tools/publish

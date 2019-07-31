@@ -1,0 +1,12 @@
+/.idea
+*.iml
+/target
+*.class
+.*.swp
+*.bak
+inputs/
+issuesReport.json
+shippable/
+zentaworkaround
+xml-doclet
+javabuild

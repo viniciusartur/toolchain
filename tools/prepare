@@ -1,0 +1,9 @@
+set -x
+export DISPLAY=:0
+if [ -a /tmp/.X11-unix/X0 ]
+then
+	echo skipping X server
+else
+    Xvnc4 -SecurityTypes none -localhost :0 &
+fi
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
