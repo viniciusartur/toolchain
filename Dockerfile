@@ -117,11 +117,11 @@ RUN wget -q https://vorboss.dl.sourceforge.net/project/pydev/pydev/PyDev%207.2.1
     rm /tmp/pydev.zip
 RUN wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar;\
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
-COPY rules.java /usr/local/toolchain/inproject/rules.java
+COPY rules.java /usr/local/toolchain/rules.java
 COPY README.md /usr/local/toolchain/README.md
 COPY inproject/pmd_rules.xml /usr/local/toolchain/inproject/pmd_rules.xml
 COPY inproject/shippable.yml /usr/local/toolchain/inproject/shippable.yml
-COPY inproject/tools/testenv /usr/local/toolchain/examples/testenv
+COPY inproject/tools/testenv /usr/local/toolchain/inproject/testenv
 COPY etc/m2/settings.xml /usr/local/toolchain/etc/m2/settings.xml
 COPY etc/workbench.xmi /usr/local/toolchain/etc/workbench.xmi
 COPY tools/entrypoint /usr/local/toolchain/tools/entrypoint
