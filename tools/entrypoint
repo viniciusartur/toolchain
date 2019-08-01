@@ -16,4 +16,5 @@ export DISPLAY=:0
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 export HOME=/home/developer
 export PATH=$PATH:/usr/local/toolchain/tools
+export BRANCH=$(getbranch)
 exec sudo -E -u developer env "PATH=$PATH" "$@"
