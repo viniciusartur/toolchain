@@ -1,11 +1,13 @@
 #set MODEL_BASENAME to the basename of the zenta model
 #set JAVA_TARGET to the filename of the file (jar or war in the target directory)
 
+TOOLCHAINDIR = /usr/local/toolchain
+
 all: install
 
 inputs/$(MODEL_BASENAME).issues.xml: shippable/$(MODEL_BASENAME)-implementedBehaviours.xml shippable/$(MODEL_BASENAME)-testcases.xml
 	mkdir -p inputs
-	tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
+	$(TOOLCHAINDIR)/tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
 
 
 install: compile sonar shippable
@@ -15,20 +17,20 @@ shippable:
 	mkdir -p shippable
 
 sonar: sonarconfig buildreports
-	./tools/pullanalize
+	$(TOOLCHAINDIR)/tools/pullanalize
 
 sonarconfig:
-	cp etc/m2/settings.xml ~/.m2
+	cp $(TOOLCHAINDIR)/etc/m2/settings.xml ~/.m2
 
 compile: zentaworkaround javabuild $(MODEL_BASENAME).compiled codedocs
 
 codedocs: shippable/$(MODEL_BASENAME)-testcases.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.html shippable/bugpriorities.xml
 
 shippable/$(MODEL_BASENAME)-testcases.xml: $(MODEL_BASENAME).richescape shippable
-	zenta-xslt-runner -xsl:generate_test_cases.xslt -s $(MODEL_BASENAME).richescape outputbase=shippable/$(MODEL_BASENAME)-
+	zenta-xslt-runner -xsl:xslt/generate_test_cases.xslt -s $(MODEL_BASENAME).richescape outputbase=shippable/$(MODEL_BASENAME)-
 
 shippable/$(MODEL_BASENAME)-implementedBehaviours.xml: buildreports shippable
-	zenta-xslt-runner -xsl:generate-behaviours.xslt -s target/test/javadoc.xml outputbase=shippable/$(MODEL_BASENAME)-
+	zenta-xslt-runner -xsl:xslt/generate-behaviours.xslt -s target/test/javadoc.xml outputbase=shippable/$(MODEL_BASENAME)-
 
 CONSISTENCY_INPUTS=shippable/$(MODEL_BASENAME)-testcases.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.xml
 
@@ -39,7 +41,7 @@ $(MODEL_BASENAME).consistencycheck: $(MODEL_BASENAME).rich $(MODEL_BASENAME).che
 	sed 's/\//:/' <$(basename $@).consistency.stderr |sort --field-separator=':' --key=2
 
 testenv:
-	./tools/testenv
+	$(TOOLCHAINDIR)/tools/testenv
 
 javabuild: maven buildreports
 	touch javabuild
@@ -54,14 +56,14 @@ maven: target/$(JAVA_TARGET) javadoc
 target/$(JAVA_TARGET): maven-prepare keystore maven-build
 
 maven-prepare:
-	mvn build-helper:parse-version versions:set versions:commit -DnewVersion=\$${parsedVersion.majorVersion}.\$${parsedVersion.minorVersion}.\$${parsedVersion.incrementalVersion}-$$(tools/getbranch|sed 'sA/A_Ag').$$(git rev-parse --short HEAD)
+	mvn build-helper:parse-version versions:set versions:commit -DnewVersion=\$${parsedVersion.majorVersion}.\$${parsedVersion.minorVersion}.\$${parsedVersion.incrementalVersion}-$$(/usr/local/toolchain/tools/getbranch|sed 'sA/A_Ag').$$(git rev-parse --short HEAD)
 	mvn clean 
 
 maven-build:
 	mvn org.jacoco:jacoco-maven-plugin:prepare-agent install org.pitest:pitest-maven:mutationCoverage site -Pintegration-test
 
 buildreports: maven
-	zenta-xslt-runner -xsl:cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml
+	zenta-xslt-runner -xsl:xslt/cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml
 	find ~/.m2/repository/org/slf4j/slf4j-api/ -regex .*slf4j-api-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-api.jar \;
 	find ~/.m2/repository/org/slf4j/slf4j-simple/ -regex .*slf4j-simple-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-simple.jar \;
 	java -cp /tmp/slf4j-api.jar:/tmp/slf4j-simple.jar:/usr/local/lib/mutation-analysis-plugin-1.3-SNAPSHOT.jar ch.devcon5.sonar.plugins.mutationanalysis.StandaloneAnalysis
@@ -73,12 +75,12 @@ clean:
 
 zentaworkaround:
 	mkdir -p ~/.zenta/.metadata/.plugins/org.eclipse.e4.workbench/
-	cp etc/workbench.xmi ~/.zenta/.metadata/.plugins/org.eclipse.e4.workbench/
+	cp $(TOOLCHAINDIR)/etc/workbench.xmi ~/.zenta/.metadata/.plugins/org.eclipse.e4.workbench/
 	touch zentaworkaround
 
 shippable/bugpriorities.xml: $(MODEL_BASENAME).consistencycheck inputs/$(MODEL_BASENAME).issues.xml $(MODEL_BASENAME).richescape shippable
-	zenta-xslt-runner -xsl:issue-priorities.xslt -s:$(MODEL_BASENAME).consistencycheck -o:shippable/bugpriorities.xml issuesfile=inputs/$(MODEL_BASENAME).issues.xml modelfile=$(MODEL_BASENAME).richescape missingissuefile=shippable/missing.xml
+	zenta-xslt-runner -xsl:xslt/issue-priorities.xslt -s:$(MODEL_BASENAME).consistencycheck -o:shippable/bugpriorities.xml issuesfile=inputs/$(MODEL_BASENAME).issues.xml modelfile=$(MODEL_BASENAME).richescape missingissuefile=shippable/missing.xml
 
 keystore:
-	./tools/generate_keystore
+	$(TOOLCHAINDIR)/tools/generate_keystore
 

@@ -12,5 +12,8 @@ then
     chown -R developer.developer /home/developer
 fi
 
+export DISPLAY=:0
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 export HOME=/home/developer
-exec sudo -u developer "$@"
+export PATH=$PATH:/usr/local/toolchain/tools
+exec sudo -E -u developer env "PATH=$PATH" "$@"

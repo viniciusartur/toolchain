@@ -112,12 +112,37 @@ RUN /opt/eclipse/eclipse -application org.eclipse.equinox.p2.director\
 	-installIUs org.springsource.ide.eclipse.commons.quicksearch\
 	-installIUs org.springframework.ide.eclipse.boot.dash\
 	-noSplash
-#	-installIUs org.eclipse.lsp4e\
-#	-installIUs org.springsource.ide.eclipse.commons.jdk\
 RUN wget -q https://vorboss.dl.sourceforge.net/project/pydev/pydev/PyDev%207.2.1/PyDev%207.2.1.zip -O /tmp/pydev.zip;\
     unzip /tmp/pydev.zip -d /opt/eclipse;\
     rm /tmp/pydev.zip
 RUN wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar;\
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
-ENTRYPOINT ["/build/tools/entrypoint"]
+COPY pmd_rules.xml /usr/local/toolchain/pmd_rules.xml
+COPY rules.java /usr/local/toolchain/rules.java
+COPY shippable.yml /usr/local/toolchain/shippable.yml
+COPY tools/testenv /usr/local/toolchain/examples/testenv
+COPY xslt/extract_actual_structure.xslt /usr/local/toolchain/xslt/extract_actual_structure.xslt
+COPY xslt/generate-behaviours.xslt /usr/local/toolchain/xslt/generate-behaviours.xslt
+COPY xslt/generate_test_cases.xslt /usr/local/toolchain/xslt/generate_test_cases.xslt
+COPY xslt/cpd2pmd.xslt /usr/local/toolchain/xslt/cpd2pmd.xslt
+COPY xslt/replace.xslt /usr/local/toolchain/xslt/replace.xslt
+COPY xslt/issue-priorities.xslt /usr/local/toolchain/xslt/issue-priorities.xslt
+COPY etc/m2 /usr/local/toolchain/etc/m2
+COPY etc/m2/settings.xml /usr/local/toolchain/etc/m2/settings.xml
+COPY etc/workbench.xmi /usr/local/toolchain/etc/workbench.xmi
+COPY tools/entrypoint /usr/local/toolchain/tools/entrypoint
+COPY tools/getbranch /usr/local/toolchain/tools/getbranch
+COPY tools/setenv /usr/local/toolchain/tools/setenv
+COPY tools/countTestcases /usr/local/toolchain/tools/countTestcases
+COPY tools/Script /usr/local/toolchain/tools/Script
+COPY tools/code2model /usr/local/toolchain/tools/code2model
+COPY tools/generate_keystore /usr/local/toolchain/tools/generate_keystore
+COPY tools/prepare /usr/local/toolchain/tools/prepare
+COPY tools/publish /usr/local/toolchain/tools/publish
+COPY tools/pullanalize /usr/local/toolchain/tools/pullanalize
+COPY tools/getGithubIssues /usr/local/toolchain/tools/getGithubIssues
+COPY tools/orgName /usr/local/toolchain/tools/orgName
+COPY README.md /usr/local/toolchain/README.md
+
+ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]
