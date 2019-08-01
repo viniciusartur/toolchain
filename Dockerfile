@@ -119,7 +119,7 @@ RUN wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lom
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
 COPY rules.java /usr/local/toolchain/rules.java
 COPY README.md /usr/local/toolchain/README.md
-COPY inproject/pmd_rules.xml /usr/local/toolchain/inproject/pmd_rules.xml
+COPY pmd_rules.xml /usr/local/toolchain/pmd_rules.xml
 COPY inproject/shippable.yml /usr/local/toolchain/inproject/shippable.yml
 COPY inproject/tools/testenv /usr/local/toolchain/inproject/testenv
 COPY etc/m2/settings.xml /usr/local/toolchain/etc/m2/settings.xml
