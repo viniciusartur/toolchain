@@ -5,19 +5,9 @@ of projects conforming to Kode Konveyor pattern
 
 # setup
 
-copy over the following files to your project:
+copy over the files from the `inproject` folder:
 
-- `pmd_rules.xml`
-- `shippable.yml`
-- `testenv`
-
-create a Makefile with the following content:
-
-    export GITHUB_ORGANIZATION=<your github user- or organization name>
-    export REPO_NAME=<the github project name>
-    MODEL_BASENAME = <the basename of the zenta model>
-    JAVA_TARGET = <the name of the java target created by mvn install>
-    include /usr/local/toolchain/rules.java
+create a Makefile referencing rules.java. See https://github.com/edemo/PDEngine/blob/develop/Makefile for an example.
 
 set the `sonarkey` and `issuetoken` environment variables to your sonar and github oauth token.
 probably you want to add them to your .bashrc
