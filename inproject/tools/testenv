@@ -4,6 +4,7 @@ DEVHOME=${DEVHOME:-~/developer-home/}
 DEV_UID=$(id -u)
 DEV_GID=$(id -g)
 DOCKER_IMAGE=${DOCKER_IMAGE:-$(grep build_image shippable.yml|awk '{print $2}')}
+ENTRYPOINT=${ENTRYPOINT:-/usr/local/toolchain/tools/entrypoint}
 VNCPORT=5900
 PORTMAP="-p $VNCPORT:$VNCPORT"
 if docker ps | grep -q ":$VNCPORT-"
@@ -12,7 +13,7 @@ then
 	PORTMAP=""
 fi
 
-docker run --rm $PORTMAP -e PULL_REQUEST=false -e DEVUID=${DEV_UID} -e DEVGID=${DEV_GID} -e ORG_NAME=local \
+docker run --rm $PORTMAP --entrypoint ${ENTRYPOINT} -e PULL_REQUEST=false -e DEVUID=${DEV_UID} -e DEVGID=${DEV_GID} -e ORG_NAME=local \
     -v $(pwd):/build -v ${DEVHOME}:/home/developer -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -w /build -it ${DOCKER_IMAGE}
+    -w /build -it ${DOCKER_IMAGE} 
 
