@@ -1,7 +1,9 @@
 language: node_js
 
 build:
-
+  cache: true
+  cache_dir_list:
+    - ~/.m2
   ci:
     - docker build -t kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER .
 
