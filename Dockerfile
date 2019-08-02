@@ -12,7 +12,7 @@ RUN echo deb http://repos.demokracia.rulez.org/apt/debian/ master main >/etc/apt
 RUN apt-get update
 RUN export DEBIAN_FRONTEND=noninteractive;apt-get -y install openjdk-11-jdk wget git xvfb unzip docbook-xsl make firefox vnc4server\
     dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil\
-    zip debhelper devscripts zenta zenta-tools maven haveged vim sudo less rsync curl jq
+    zip debhelper devscripts zenta zenta-tools maven haveged vim sudo less rsync curl jq python3-pip
 
 RUN pip install jira 
 RUN git clone --branch standalone-analysis-java11 https://github.com/magwas/mutation-analysis-plugin.git; \
