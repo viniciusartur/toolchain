@@ -10,5 +10,7 @@ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 if [ -f requirements.txt ]
 then
     pip3 install -r requirements.txt
+    /usr/local/toolchain/tools/createPypirc
 fi
-
+export GIT_TAG=$(git tag --points-at HEAD)
+set +x

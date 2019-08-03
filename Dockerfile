@@ -136,6 +136,9 @@ COPY tools/publish /usr/local/toolchain/tools/publish
 COPY tools/pullanalize /usr/local/toolchain/tools/pullanalize
 COPY tools/getGithubIssues /usr/local/toolchain/tools/getGithubIssues
 COPY tools/orgName /usr/local/toolchain/tools/orgName
+COPY tools/createPypirc /usr/local/toolchain/tools/createPypirc
+COPY tools/makeReport /usr/local/toolchain/tools/makeReport
+COPY tools/pyTestRunner /usr/local/toolchain/tools/pyTestRunner
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]

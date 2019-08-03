@@ -1,0 +1,15 @@
+#!/bin/bash
+
+content=$(cat MVCE_CONTENT)
+for i in $(find $content -type f)
+do
+	echo $i:
+	sed 's/^/    /' <$i
+	echo -e "\n\n"
+done
+
+TAG=$(git tag --points-at HEAD)
+REPO=$(git remote -v |grep "origin.*fetch"|awk '{print $2}')
+echo "You can recreate the above, including dependencies hidden here with:"
+echo "    git clone -b $TAG $REPO build; cd build ; tools/testenv"
+
