@@ -10,7 +10,7 @@ build:
     - docker build -t kodekonveyor/toolchain:$BRANCH .
 
   post_ci:
-    - docker push kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER
+#    - docker push kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER
     - docker push kodekonveyor/toolchain:$BRANCH
 
 integrations:
