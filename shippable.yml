@@ -5,7 +5,7 @@ build:
   cache_dir_list:
     - ~/.m2
   ci:
-    - docker build --no-cache -t kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER .
+#    - docker build --no-cache -t kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER .
 #    - ./test.sh
     - docker build -t kodekonveyor/toolchain:$BRANCH .
 
