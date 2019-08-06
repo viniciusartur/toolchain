@@ -122,6 +122,8 @@ COPY README.md /usr/local/toolchain/README.md
 COPY pmd_rules.xml /usr/local/toolchain/pmd_rules.xml
 COPY inproject/shippable.yml /usr/local/toolchain/inproject/shippable.yml
 COPY inproject/tools/testenv /usr/local/toolchain/inproject/testenv
+COPY inproject/functions.local.xslt /usr/local/toolchain/inproject/functions.local.xslt
+COPY inproject/docbook.local.xslt /usr/local/toolchain/inproject/docbook.local.xslt
 COPY etc/m2/settings.xml /usr/local/toolchain/etc/m2/settings.xml
 COPY etc/workbench.xmi /usr/local/toolchain/etc/workbench.xmi
 COPY tools/entrypoint /usr/local/toolchain/tools/entrypoint
