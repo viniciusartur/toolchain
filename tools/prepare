@@ -13,4 +13,5 @@ then
     /usr/local/toolchain/tools/createPypirc
 fi
 export GIT_TAG=$(git tag --points-at HEAD)
+export PATH=$PATH:/usr/local/toolchain/tools
 set +x
