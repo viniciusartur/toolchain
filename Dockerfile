@@ -15,6 +15,8 @@ RUN export DEBIAN_FRONTEND=noninteractive;apt-get -y install openjdk-11-jdk wget
     zip debhelper devscripts zenta zenta-tools maven haveged vim sudo less rsync curl jq python3-pip doxygen
 
 RUN pip install jira 
+RUN pip3 install mutmut doxypypy setuptools wheel twine
+
 RUN git clone --branch standalone-analysis-java11 https://github.com/magwas/mutation-analysis-plugin.git; \
 	cd mutation-analysis-plugin;\
 	mvn install;\
