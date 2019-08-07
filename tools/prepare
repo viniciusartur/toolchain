@@ -1,5 +1,5 @@
 set -x
-export DISPLAY=:0
+. /usr/local/toolchain/tools/environment
 if [ -a /tmp/.X11-unix/X0 ]
 then
 	echo skipping X server
@@ -12,6 +12,4 @@ then
     pip3 install -r requirements.txt
     /usr/local/toolchain/tools/createPypirc
 fi
-export GIT_TAG=$(git tag --points-at HEAD)
-export PATH=$PATH:/usr/local/toolchain/tools
 set +x

@@ -136,6 +136,7 @@ COPY tools/Script /usr/local/toolchain/tools/Script
 COPY tools/code2model /usr/local/toolchain/tools/code2model
 COPY tools/generate_keystore /usr/local/toolchain/tools/generate_keystore
 COPY tools/prepare /usr/local/toolchain/tools/prepare
+COPY tools/environment /usr/local/toolchain/tools/environment
 COPY tools/publish /usr/local/toolchain/tools/publish
 COPY tools/pullanalize /usr/local/toolchain/tools/pullanalize
 COPY tools/getGithubIssues /usr/local/toolchain/tools/getGithubIssues
