@@ -17,4 +17,5 @@ fi
 
 export BRANCH=$(getbranch)
 export BUILD_NUMBER=0
+export HOME=/home/developer
 exec sudo -E -u developer env "PATH=$PATH" "$@"

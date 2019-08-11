@@ -9,5 +9,5 @@ repository = https://upload.pypi.org/legacy/
 username = @token
 EOF
 
-echo "password = $pypy_token" >>~/.pypirc
+echo "password = $pypi_token" >>~/.pypirc
 

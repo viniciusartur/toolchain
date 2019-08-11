@@ -1,6 +1,5 @@
 export DISPLAY=:0
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-export HOME=/home/developer
 export PATH=$PATH:/usr/local/toolchain/tools
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
