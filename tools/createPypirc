@@ -6,7 +6,7 @@ index-servers=pypi
 
 [pypi] 
 repository = https://upload.pypi.org/legacy/ 
-username = @token
+username = __token__
 EOF
 
 echo "password = $pypi_token" >>~/.pypirc
