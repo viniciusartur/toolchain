@@ -1,5 +1,6 @@
 #!/bin/bash
 set -xe
+. /usr/local/toolchain/tools/environment
 export repo=$(git remote -v|grep "origin.*fetch"|sed 'sA^.*github.com/AA;sA/.*AA')
 export project=$(git remote -v|grep "origin.*fetch"|sed 'sA.*/AA;sA.git.*AA')
 rsync -e "ssh -p 22022" -ar shippable/ shippable@repo.kodekonveyor.com:/var/www/repo/$project/$repo/$BUILD_NUMBER
