@@ -1,0 +1,49 @@
+
+all: deliver documentation
+
+include /usr/share/zenta-tools/model.rules
+
+documentation: zentaworkaround $(MODEL_BASENAME).compiled
+	mv $(MODEL_BASENAME) shippable
+
+deliver: compile
+	mv dist shippable
+	touch deliver
+
+compile: tests shippable
+	./setup.py bdist_wheel
+	touch compile
+
+shippable:
+	mkdir -p shippable
+
+tests:	unittest mutationtest
+	touch tests
+
+unittest:
+	pyTestRunner
+	touch unittest
+
+mutationtest:
+	python3 -m mutmut run
+	touch mutationtest
+
+publish_release:
+	cat ~/.pypirc | sed 's/[A-Z]/X/g'
+	python3 -m twine upload shippable/dist/*
+
+clean:
+	git clean -fdx
+
+
+buildreports: target/test/$(REPO_NAME).xml target/src/$(REPO_NAME).xml
+
+target/test/$(REPO_NAME).xml: target
+	python3 -m astinxml $(PWD)/test >target/test/$(REPO_NAME).xml
+
+target/src/$(REPO_NAME).xml: target
+	python3 -m astinxml $(PWD)/src >target/src/$(REPO_NAME).xml
+
+target:
+	mkdir -p target/src target/test
+
