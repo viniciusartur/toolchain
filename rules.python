@@ -53,7 +53,7 @@ zentaworkaround:
 	cp /usr/local/toolchain/etc/workbench.xmi ~/.zenta/.metadata/.plugins/org.eclipse.e4.workbench/
 	touch zentaworkaround
 
-inputs/astinxml.issues.xml: inputs
+inputs/$(MODEL_BASENAME).issues.xml: inputs
 	$(TOOLCHAINDIR)/tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
 
 inputs:

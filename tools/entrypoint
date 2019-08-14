@@ -1,10 +1,12 @@
 #!/bin/bash
 set -xe
-
+DEVUID=${DEVUID:-1000}
+DEVGID=${DEVGID:-1000}
 rm /dev/random
 cp -a /dev/urandom /dev/random;
 groupadd -g ${DEVGID} developer
 useradd -u ${DEVUID} -g ${DEVGID} -G sudo -d /home/developer developer
+mkdir -p /home/developer
 chown ${DEVUID}:${DEVGID} /home/developer
 if [ ! -d /home/developer/.m2 ]
 then
