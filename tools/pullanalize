@@ -18,6 +18,7 @@ then
         -Dsonar.pullrequest.base=${BASE_BRANCH}\
         -Dsonar.github.oauth=${GITHUB_OAUTH}\
         -Dsonar.github.repository=${REPO_FULL_NAME}\
+        -Dsonar.projectKey=${REPO_NAME}\
         -Dsonar.issuesReport.console.enable=true\
         -Dsonar.github.login=${GITUSER}\
         -Dsonar.externalIssuesReportPaths=issuesReport.json\
@@ -30,5 +31,6 @@ else
      -Dsonar.branch.name=${BRANCH}\
      -Dsonar.externalIssuesReportPaths=issuesReport.json\
      -Dsonar.tests=src/test,src/integration-test\
+     -Dsonar.projectKey=${REPO_NAME}\
      -Pintegration-test
 fi
