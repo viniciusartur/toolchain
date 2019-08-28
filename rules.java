@@ -1,7 +1,7 @@
 #set MODEL_BASENAME to the basename of the zenta model
 #set JAVA_TARGET to the filename of the file (jar or war in the target directory)
 
-TOOLCHAINDIR = /usr/local/toolchain
+export TOOLCHAINDIR = /usr/local/toolchain
 
 all: install
 
@@ -10,8 +10,11 @@ inputs/$(MODEL_BASENAME).issues.xml: shippable/$(MODEL_BASENAME)-implementedBeha
 	$(TOOLCHAINDIR)/tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
 
 
-install: compile sonar shippable
+install: pomcheck compile sonar shippable
 	cp -rf $(MODEL_BASENAME)/* target/* shippable
+
+pomcheck:
+	$(TOOLCHAINDIR)/tools/pomchecker
 
 shippable:
 	mkdir -p shippable
