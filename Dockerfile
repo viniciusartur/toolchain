@@ -145,6 +145,8 @@ COPY tools/orgName /usr/local/toolchain/tools/orgName
 COPY tools/createPypirc /usr/local/toolchain/tools/createPypirc
 COPY tools/makeReport /usr/local/toolchain/tools/makeReport
 COPY tools/pyTestRunner /usr/local/toolchain/tools/pyTestRunner
+COPY tools/pomchecker /usr/local/toolchain/tools/pomchecker
+COPY tools/pomchecker.xslt /usr/local/toolchain/tools/pomchecker.xslt
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]
