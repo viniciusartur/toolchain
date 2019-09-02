@@ -1,5 +1,7 @@
 #!/bin/bash
 set -xe
+export issuetoken
+export sonarkey
 . /usr/local/toolchain/tools/prepare
 set -xe
 make
