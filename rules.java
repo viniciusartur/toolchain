@@ -3,14 +3,14 @@
 
 export TOOLCHAINDIR = /usr/local/toolchain
 
-all: install
+all: $(BEFORE_ALL) install
 
 inputs/$(MODEL_BASENAME).issues.xml: shippable/$(MODEL_BASENAME)-implementedBehaviours.xml shippable/$(MODEL_BASENAME)-testcases.xml
 	mkdir -p inputs
 	$(TOOLCHAINDIR)/tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
 
 
-install: pomcheck compile sonar shippable
+install: $(BEFORE_INSTALL) pomcheck compile sonar shippable
 	cp -rf $(MODEL_BASENAME)/* target/* shippable
 
 pomcheck:
@@ -19,13 +19,13 @@ pomcheck:
 shippable:
 	mkdir -p shippable
 
-sonar: sonarconfig buildreports
+sonar: $(BEFORE_SONAR) sonarconfig buildreports
 	$(TOOLCHAINDIR)/tools/pullanalize
 
 sonarconfig:
 	cp $(TOOLCHAINDIR)/etc/m2/settings.xml ~/.m2
 
-compile: zentaworkaround javabuild $(MODEL_BASENAME).compiled codedocs
+compile: $(BEFORE_COMPILE) zentaworkaround javabuild $(MODEL_BASENAME).compiled codedocs
 
 codedocs: shippable/$(MODEL_BASENAME)-testcases.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.html shippable/bugpriorities.xml
 
@@ -46,11 +46,11 @@ $(MODEL_BASENAME).consistencycheck: $(MODEL_BASENAME).rich $(MODEL_BASENAME).che
 testenv:
 	$(TOOLCHAINDIR)/tools/testenv
 
-javabuild: maven buildreports
+javabuild: $(BEFORE_JAVABUILD) maven buildreports
 	touch javabuild
 
 
-javadoc:
+javadoc: $(BEFORE_JAVADOC)
 	mkdir -p target/production target/test
 	JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 mvn javadoc:javadoc javadoc:test-javadoc site
 
@@ -58,20 +58,20 @@ maven: target/$(JAVA_TARGET) javadoc
 
 target/$(JAVA_TARGET): maven-prepare keystore maven-build
 
-maven-prepare:
+maven-prepare: $(BEFORE_MAVEN_PREPARE)
 	mvn build-helper:parse-version versions:set versions:commit -DnewVersion=\$${parsedVersion.majorVersion}.\$${parsedVersion.minorVersion}.\$${parsedVersion.incrementalVersion}-$$(/usr/local/toolchain/tools/getbranch|sed 'sA/A_Ag').$$(git rev-parse --short HEAD)
 	mvn clean 
 
-maven-build:
+maven-build: $(BEFORE_MAVEN_BUILD)
 	mvn org.jacoco:jacoco-maven-plugin:prepare-agent install org.pitest:pitest-maven:mutationCoverage site -Pintegration-test
 
-buildreports: maven
+buildreports: $(BEFORE_BUILDREPORTS) maven
 	zenta-xslt-runner -xsl:xslt/cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml
 	find ~/.m2/repository/org/slf4j/slf4j-api/ -regex .*slf4j-api-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-api.jar \;
 	find ~/.m2/repository/org/slf4j/slf4j-simple/ -regex .*slf4j-simple-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-simple.jar \;
 	java -cp /tmp/slf4j-api.jar:/tmp/slf4j-simple.jar:/usr/local/lib/mutation-analysis-plugin-1.3-SNAPSHOT.jar ch.devcon5.sonar.plugins.mutationanalysis.StandaloneAnalysis
 
-clean:
+clean: $(BEFORE_CLEAN)
 	git clean -fdx
 	rm -rf zenta-tools xml-doclet
 
