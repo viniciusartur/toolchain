@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -xe
+wget -q https://raw.githubusercontent.com/kode-konveyor/metamodel/master/metamodel.zenta
+zenta-xslt-runner -xsl:xslt/update-metamodel.xslt -s:$1 -o $1.out
+mv $1.out $1
+rm metamodel.zenta
