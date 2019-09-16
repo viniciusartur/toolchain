@@ -146,6 +146,7 @@ COPY tools/createPypirc /usr/local/toolchain/tools/createPypirc
 COPY tools/makeReport /usr/local/toolchain/tools/makeReport
 COPY tools/pyTestRunner /usr/local/toolchain/tools/pyTestRunner
 COPY tools/pomchecker /usr/local/toolchain/tools/pomchecker
+COPY tools/update-metamodel /usr/local/toolchain/tools/update-metamodel
 COPY tools/pomchecker.xslt /usr/local/toolchain/tools/pomchecker.xslt
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
