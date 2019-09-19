@@ -19,20 +19,20 @@ pomcheck:
 shippable:
 	mkdir -p shippable
 
-ifneq ($(IS_PULL_REQUEST),true)
+ifeq ($(IS_PULL_REQUEST),true)
 
-sonar: $(BEFORE_SONAR) sonarconfig buildreports
-	$(TOOLCHAINDIR)/tools/pullanalize
-
-createdocs: $(MODEL_BASENAME).compiled codedocs
-
-else #IS_PULL_REQUEST
 
 sonar:
 
 createdocs:
 	$(TOOLCHAINDIR)/tools/noPullRequest
 
+else #IS_PULL_REQUEST
+
+sonar: $(BEFORE_SONAR) sonarconfig buildreports
+	$(TOOLCHAINDIR)/tools/pullanalize
+
+createdocs: $(MODEL_BASENAME).compiled codedocs
 endif #IS_PULL_REQUEST
 
 sonarconfig:
