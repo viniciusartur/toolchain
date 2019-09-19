@@ -32,7 +32,10 @@ else #IS_PULL_REQUEST
 sonar: $(BEFORE_SONAR) sonarconfig buildreports
 	$(TOOLCHAINDIR)/tools/pullanalize
 
-createdocs: $(MODEL_BASENAME).compiled codedocs
+createdocs: $(MODEL_BASENAME).compiled codedocs checkdoc
+
+checkdoc: $(MODEL_BASENAME).consistencycheck
+	tools/checkDocErrors
 endif #IS_PULL_REQUEST
 
 sonarconfig:
