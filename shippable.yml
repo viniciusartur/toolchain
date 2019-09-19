@@ -5,13 +5,14 @@ build:
   cache_dir_list:
     - ~/.m2
   ci:
-#    - docker build --no-cache -t kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER .
-#    - ./test.sh
-    - docker build -t kodekonveyor/toolchain:$BRANCH .
+    - docker build --no-cache -t kodekonveyor/toolchain:$BUILD_NUMBER .
+    - docker tag kodekonveyor/toolchain:$BUILD_NUMBER kodekonveyor/toolchain:$(echo $BRANCH|sed 'sA/A.Ag')
+    - if [ -n $GIT_TAG_NAME ] then docker tag kodekonveyor/toolchain:$BUILD_NUMBER kodekonveyor/toolchain:$GIT_TAG_NAME; fi
 
   post_ci:
-#    - docker push kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER
-    - docker push kodekonveyor/toolchain:$BRANCH
+    - docker push kodekonveyor/toolchain:$BUILD_NUMBER .
+    - docker push kodekonveyor/toolchain:$(echo $BUILD_NUMBER|sed 'sA/A.Ag')
+    - if [ -n $GIT_TAG_NAME ] then docker push kodekonveyor/toolchain:$GIT_TAG_NAME; fi
 
 integrations:
   hub:
