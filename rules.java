@@ -25,7 +25,7 @@ ifeq ($(IS_PULL_REQUEST),true)
 sonar:
 
 createdocs:
-	$(TOOLCHAINDIR)/tools/noPullRequest
+	$(TOOLCHAINDIR)/tools/notCreatingDocumentationInPullRequest
 
 else #IS_PULL_REQUEST
 
