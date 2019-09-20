@@ -35,7 +35,7 @@ sonar: $(BEFORE_SONAR) sonarconfig buildreports
 createdocs: $(MODEL_BASENAME).compiled codedocs checkdoc
 
 checkdoc: $(MODEL_BASENAME).consistencycheck
-	tools/checkDocErrors
+	$(TOOLCHAINDIR)/tools/checkDocErrors
 endif #IS_PULL_REQUEST
 
 sonarconfig:
