@@ -15,10 +15,10 @@
     <xsl:variable name="metamodel" select="document($metamodelUri)"/>
     <xsl:variable name="model" select="/"/>
     <xsl:variable name="modelVersion" select="$model//folder[@id='metamodel']/property[@key='version']/@value"/>
-    <xsl:variable name="failBelow" select="$metamodel//folder[@id='metamodel']/property[@key='fail below']/@value"/>
+    <xsl:variable name="minimumMetamodelVersion" select="$metamodel//folder[@id='metamodel']/property[@key='minimum metamodel version']/@value"/>
     <xsl:variable name="minimumToolchainVersion" select="$metamodel//folder[@id='metamodel']/property[@key='minimum toolchain version']/@value"/>#
 modelVersion=<xsl:value-of select="$modelVersion"/>
-failBelow=<xsl:value-of select="$failBelow"/>
+minimumMetamodelVersion=<xsl:value-of select="$minimumMetamodelVersion"/>
 minimumToolchainVersion=<xsl:value-of select="$minimumToolchainVersion"/>
 #
 </xsl:template>

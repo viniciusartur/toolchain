@@ -29,10 +29,10 @@ class VersionChecker:
         actualVersionParsed = version.parse(self.versions[actualVersion])
         minimumVersionParsed = version.parse(self.versions[minimumVersion])
         if actualVersionParsed < minimumVersionParsed:
-            print("{0}({2}) is less than {1}({3})".format('imageVersion','minimumToolchainVersion',actualVersionParsed,minimumVersionParsed))
+            print("{0}({2}) is less than {1}({3})".format(actualVersion,minimumVersion,actualVersionParsed,minimumVersionParsed))
             sys.exit(-1)
 
 checker = VersionChecker()
 print(checker.versions)
-checker.checkVersion('modelVersion', 'failBelow')
+checker.checkVersion('modelVersion', 'minimumMetamodelVersion')
 checker.checkVersion('imageVersion', 'minimumToolchainVersion')
