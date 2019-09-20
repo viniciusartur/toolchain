@@ -151,6 +151,7 @@ COPY tools/pomchecker.xslt /usr/local/toolchain/tools/pomchecker.xslt
 COPY tools/tools/notCreatingDocumentationInPullRequest /usr/local/toolchain/tools/notCreatingDocumentationInPullRequest
 COPY tools/versioncheck.py /usr/local/toolchain/tools/versioncheck.py
 COPY tools/versions.xslt /usr/local/toolchain/tools/versions.xslt
+COPY tools/checkDocErrors /usr/local/toolchain/tools/checkDocErrors
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]
