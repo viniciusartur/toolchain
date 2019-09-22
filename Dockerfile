@@ -15,7 +15,7 @@ RUN export DEBIAN_FRONTEND=noninteractive;apt-get -y install openjdk-11-jdk wget
     zip debhelper devscripts zenta zenta-tools maven haveged vim sudo less rsync curl jq python3-pip doxygen
 
 RUN pip install jira 
-RUN pip3 install mutmut doxypypy setuptools wheel twine
+RUN pip3 install mutmut doxypypy setuptools wheel twine packaging
 
 RUN git clone --branch standalone-analysis-java11 https://github.com/magwas/mutation-analysis-plugin.git; \
 	cd mutation-analysis-plugin;\
@@ -148,6 +148,10 @@ COPY tools/pyTestRunner /usr/local/toolchain/tools/pyTestRunner
 COPY tools/pomchecker /usr/local/toolchain/tools/pomchecker
 COPY tools/update-metamodel /usr/local/toolchain/tools/update-metamodel
 COPY tools/pomchecker.xslt /usr/local/toolchain/tools/pomchecker.xslt
+COPY tools/notCreatingDocumentationInPullRequest /usr/local/toolchain/tools/notCreatingDocumentationInPullRequest
+COPY tools/versioncheck.py /usr/local/toolchain/tools/versioncheck.py
+COPY tools/versions.xslt /usr/local/toolchain/tools/versions.xslt
+COPY tools/checkDocErrors /usr/local/toolchain/tools/checkDocErrors
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]

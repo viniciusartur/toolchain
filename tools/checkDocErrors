@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if grep '<entry name="constraintError"'>/dev/null $MODEL_BASENAME.consistencycheck
+then 
+    echo "constraintErrors in documentation, failing build"
+    exit 1
+fi

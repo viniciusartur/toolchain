@@ -5,13 +5,10 @@ build:
   cache_dir_list:
     - ~/.m2
   ci:
-#    - docker build --no-cache -t kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER .
-#    - ./test.sh
-    - docker build -t kodekonveyor/toolchain:$BRANCH .
+    - tools/buildDocker
 
   post_ci:
-#    - docker push kodekonveyor/toolchain:$BRANCH.$BUILD_NUMBER
-    - docker push kodekonveyor/toolchain:$BRANCH
+    - tools/pushDocker
 
 integrations:
   hub:

@@ -8,6 +8,11 @@ fi
 export repo=$(git remote -v|grep "origin.*fetch"|sed 'sA^.*github.com/AA;sA/.*AA;s/^.*://')
 export project=$(git remote -v|grep "origin.*fetch"|sed 'sA.*/AA;sA.git.*AA')
 rsync -e "ssh -p 22022" -ar shippable/ shippable@repo.kodekonveyor.com:/var/www/repo/$project/$repo/$BUILD_NUMBER
+
+if [ $IS_PULL_REQUEST = true ]
+then
+  exit 0
+fi
 normalized_branch=$(echo $BRANCH|sed 'sA[/_]A.Ag')
 ln -s $BUILD_NUMBER $normalized_branch
 rsync -e "ssh -p 22022" -a $normalized_branch shippable@repo.kodekonveyor.com:/var/www/repo/$project/$repo
