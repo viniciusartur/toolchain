@@ -19,13 +19,30 @@ pomcheck:
 shippable:
 	mkdir -p shippable
 
+ifeq ($(IS_PULL_REQUEST),true)
+
+
+sonar:
+
+createdocs:
+	$(TOOLCHAINDIR)/tools/notCreatingDocumentationInPullRequest
+
+else #IS_PULL_REQUEST
+
 sonar: $(BEFORE_SONAR) sonarconfig buildreports
 	$(TOOLCHAINDIR)/tools/pullanalize
+
+createdocs: $(MODEL_BASENAME).compiled codedocs checkdoc
+
+checkdoc: $(MODEL_BASENAME).consistencycheck
+	$(TOOLCHAINDIR)/tools/checkDocErrors
+endif #IS_PULL_REQUEST
 
 sonarconfig:
 	cp $(TOOLCHAINDIR)/etc/m2/settings.xml ~/.m2
 
-compile: $(BEFORE_COMPILE) zentaworkaround javabuild $(MODEL_BASENAME).compiled codedocs
+compile: $(BEFORE_COMPILE) zentaworkaround javabuild createdocs
+
 
 codedocs: shippable/$(MODEL_BASENAME)-testcases.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.html shippable/bugpriorities.xml
 
