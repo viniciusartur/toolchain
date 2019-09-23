@@ -152,6 +152,7 @@ COPY tools/notCreatingDocumentationInPullRequest /usr/local/toolchain/tools/notC
 COPY tools/versioncheck.py /usr/local/toolchain/tools/versioncheck.py
 COPY tools/versions.xslt /usr/local/toolchain/tools/versions.xslt
 COPY tools/checkDocErrors /usr/local/toolchain/tools/checkDocErrors
+COPY tools/testBuild /usr/local/toolchain/tools/testBuild
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]

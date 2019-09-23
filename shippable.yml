@@ -14,3 +14,6 @@ integrations:
   hub:
     - integrationName: docker
       type: dockerRegistryLogin
+  generic:
+    - integrationName: kkpipeline
+

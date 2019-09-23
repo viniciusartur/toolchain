@@ -2,9 +2,7 @@
 set -xe
 echo "BUILD_NUMBER=$BUILD_NUMBER."
 echo "BRANCH=$BRANCH."
-echo "GIT_TAG_NAME=$GIT_TAG_NAME."
 
 docker push kodekonveyor/toolchain:$BUILD_NUMBER 
 docker push kodekonveyor/toolchain:$(echo $BRANCH|sed 'sA/A.Ag')
-if [ "x$GIT_TAG_NAME" != "x" ]; then docker push kodekonveyor/toolchain:$GIT_TAG_NAME; else echo not building for tag ;fi
 
