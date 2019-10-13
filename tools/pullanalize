@@ -10,7 +10,7 @@ HEAD_BRANCH=$(normalize_branch_name_for_sonar "${HEAD_BRANCH}")
 BRANCH=$(normalize_branch_name_for_sonar "${BRANCH}")
 if [ $PULL_REQUEST != false ]
 then
-    mvn sonar:sonar -Dsonar.organization=${SONAR_ORG}\
+    mvn -b sonar:sonar -Dsonar.organization=${SONAR_ORG}\
         -Dsonar.pullrequest.provider=github\
         -Dsonar.pullrequest.github.repository=${REPO_FULL_NAME} \
         -Dsonar.pullrequest.branch=${HEAD_BRANCH}\
@@ -26,7 +26,7 @@ then
         -Dsonar.tests=src/test,src/integration-test\
         -Pintegration-test
 else
-    mvn sonar:sonar -Dsonar.organization=${SONAR_ORG}\
+    mvn -b sonar:sonar -Dsonar.organization=${SONAR_ORG}\
      -Dsonar.java.pmd.reportPaths=target/pmd_full.xml\
      -Dsonar.branch.name=${BRANCH}\
      -Dsonar.externalIssuesReportPaths=issuesReport.json\
