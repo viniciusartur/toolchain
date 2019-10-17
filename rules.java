@@ -50,7 +50,7 @@ shippable/$(MODEL_BASENAME)-testcases.xml: $(MODEL_BASENAME).richescape shippabl
 	zenta-xslt-runner -xsl:xslt/generate_test_cases.xslt -s $(MODEL_BASENAME).richescape outputbase=shippable/$(MODEL_BASENAME)-
 
 shippable/$(MODEL_BASENAME)-implementedBehaviours.xml: buildreports shippable $(MODEL_BASENAME).rich
-	zenta-xslt-runner -xsl:xslt/generate-behaviours.xslt -s target/test/javadoc.xml outputbase=shippable/$(MODEL_BASENAME)-
+	zenta-xslt-runner -xsl:xslt/generate-behaviours.xslt -s target/test/javadoc.xml outputbase=shippable/$(MODEL_BASENAME)- modelbasename=$(MODEL_BASENAME)
 
 CONSISTENCY_INPUTS=shippable/$(MODEL_BASENAME)-testcases.xml shippable/$(MODEL_BASENAME)-implementedBehaviours.xml
 
@@ -69,18 +69,18 @@ javabuild: $(BEFORE_JAVABUILD) maven buildreports
 
 javadoc: $(BEFORE_JAVADOC)
 	mkdir -p target/production target/test
-	JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 mvn javadoc:javadoc javadoc:test-javadoc site
+	JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 mvn -B javadoc:javadoc javadoc:test-javadoc site
 
 maven: target/$(JAVA_TARGET) javadoc
 
 target/$(JAVA_TARGET): maven-prepare keystore maven-build
 
 maven-prepare: $(BEFORE_MAVEN_PREPARE)
-	mvn build-helper:parse-version versions:set versions:commit -DnewVersion=\$${parsedVersion.majorVersion}.\$${parsedVersion.minorVersion}.\$${parsedVersion.incrementalVersion}-$$(/usr/local/toolchain/tools/getbranch|sed 'sA/A_Ag').$$(git rev-parse --short HEAD)
-	mvn clean 
+	mvn -B build-helper:parse-version versions:set versions:commit -DnewVersion=\$${parsedVersion.majorVersion}.\$${parsedVersion.minorVersion}.\$${parsedVersion.incrementalVersion}-$$(/usr/local/toolchain/tools/getbranch|sed 'sA/A_Ag').$$(git rev-parse --short HEAD)
+	mvn -B clean 
 
 maven-build: $(BEFORE_MAVEN_BUILD)
-	mvn org.jacoco:jacoco-maven-plugin:prepare-agent install org.pitest:pitest-maven:mutationCoverage site -Pintegration-test
+	mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent install org.pitest:pitest-maven:mutationCoverage site -Pintegration-test
 
 buildreports: $(BEFORE_BUILDREPORTS) maven
 	zenta-xslt-runner -xsl:xslt/cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml

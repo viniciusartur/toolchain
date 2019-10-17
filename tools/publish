@@ -10,13 +10,12 @@ export project=$(git remote -v|grep "origin.*fetch"|sed 'sA.*/AA;sA.git.*AA')
 
 if [ $IS_PULL_REQUEST = true ]
 then
-  exit 0
-fi
 normalized_branch=$(echo $BRANCH|sed 'sA[/_]A.Ag')
 linkcommanf="ln -s $BUILD_NUMBER $normalized_branch"
-rmcommand="rm $normalized_branch"
+rmcommand="-rm $normalized_branch"
+fi
 
-echo -e "mkdir /$project/$repo\ncd /$project/$repo\nput -r shippable $BUILD_NUMBER\n$rmcommand\n$linkcommand" | sftp -oPort=22022 r_$repo@repository.kodekonveyor.com
+echo -e "mkdir /$project/$repo\ncd /$project/$repo\nput -r shippable $BUILD_NUMBER\n$rmcommand\n$linkcommand" | sftp -b- -oPort=22022 r_$repo@repository.kodekonveyor.com
 
 if [ -n "${GIT_TAG}" ]
 then
