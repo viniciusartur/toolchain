@@ -15,7 +15,7 @@ linkcommanf="ln -s $BUILD_NUMBER $normalized_branch"
 rmcommand="-rm $normalized_branch"
 fi
 
-echo -e "mkdir /$project/$repo\ncd /$project/$repo\nput -r shippable $BUILD_NUMBER\n$rmcommand\n$linkcommand" | sftp -b- -oPort=22022 r_$repo@repository.kodekonveyor.com
+echo -e "cd /$project/$repo\nput -r shippable $BUILD_NUMBER\n$rmcommand\n$linkcommand" | sftp -b- -oPort=22022 r_$repo@repository.kodekonveyor.com
 
 if [ -n "${GIT_TAG}" ]
 then
