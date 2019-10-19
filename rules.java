@@ -16,7 +16,7 @@ install: $(BEFORE_INSTALL) pomcheck compile checks shippable
 pomcheck:
 	$(TOOLCHAINDIR)/tools/pomchecker
 
-checks: pmdcheck cpdcheck coveragecheck
+checks: pmdcheck coveragecheck
 
 cpdcheck: javadoc
 	if grep -A 1 "<duplication" target/cpd.xml; then exit 1; fi
