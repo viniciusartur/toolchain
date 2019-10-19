@@ -10,11 +10,26 @@ inputs/$(MODEL_BASENAME).issues.xml: shippable/$(MODEL_BASENAME)-implementedBeha
 	$(TOOLCHAINDIR)/tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
 
 
-install: $(BEFORE_INSTALL) pomcheck compile sonar shippable
+install: $(BEFORE_INSTALL) pomcheck compile checks shippable
 	cp -rf $(MODEL_BASENAME)/* target/* shippable
 
 pomcheck:
 	$(TOOLCHAINDIR)/tools/pomchecker
+
+checks: pmdcheck cpdcheck coveragecheck
+
+cpdcheck: javadoc
+	if grep -A 1 "<duplication" target/cpd.xml; then exit 1; fi
+
+pmdcheck: javadoc
+	if grep -A 1 "<violation" target/pmd.xml; then exit 1; fi
+
+coveragecheck: target/coverage-report
+	if grep ERROR target/coverage-report; then exit 1; fi
+
+target/coverage-report: javadoc maven-build
+	wget https://raw.githubusercontent.com/jacoco/jacoco/master/org.jacoco.report/src/org/jacoco/report/xml/report.dtd -O target/site/jacoco/report.dtd
+	mutations=$$(ls $(PWD)/target/pit-reports/*/mutations.xml);zenta-xslt-runner -xsl:xslt/check_coverage.xslt -s:$$mutations -o:target/coverage-report
 
 shippable:
 	mkdir -p shippable
@@ -22,24 +37,16 @@ shippable:
 ifeq ($(IS_PULL_REQUEST),true)
 
 
-sonar:
-
 createdocs:
 	$(TOOLCHAINDIR)/tools/notCreatingDocumentationInPullRequest
 
 else #IS_PULL_REQUEST
-
-sonar: $(BEFORE_SONAR) sonarconfig buildreports
-	$(TOOLCHAINDIR)/tools/pullanalize
 
 createdocs: $(MODEL_BASENAME).compiled codedocs checkdoc
 
 checkdoc: $(MODEL_BASENAME).consistencycheck
 	$(TOOLCHAINDIR)/tools/checkDocErrors
 endif #IS_PULL_REQUEST
-
-sonarconfig:
-	cp $(TOOLCHAINDIR)/etc/m2/settings.xml ~/.m2
 
 compile: $(BEFORE_COMPILE) zentaworkaround javabuild createdocs
 
