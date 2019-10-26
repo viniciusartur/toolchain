@@ -122,7 +122,6 @@ RUN wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lom
 COPY rules.java /usr/local/toolchain/rules.java
 COPY rules.python /usr/local/toolchain/rules.python
 COPY README.md /usr/local/toolchain/README.md
-COPY pmd_rules.xml /usr/local/toolchain/pmd_rules.xml
 COPY inproject/shippable.yml /usr/local/toolchain/inproject/shippable.yml
 COPY inproject/tools/testenv /usr/local/toolchain/inproject/testenv
 COPY inproject/functions.local.xslt /usr/local/toolchain/inproject/functions.local.xslt
@@ -153,6 +152,7 @@ COPY tools/versioncheck.py /usr/local/toolchain/tools/versioncheck.py
 COPY tools/versions.xslt /usr/local/toolchain/tools/versions.xslt
 COPY tools/checkDocErrors /usr/local/toolchain/tools/checkDocErrors
 COPY tools/testBuild /usr/local/toolchain/tools/testBuild
+COPY pmd /usr/local/toolchain/tools/pmd
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]

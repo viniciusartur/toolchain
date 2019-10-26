@@ -3,7 +3,7 @@ set -xe
 echo "BUILD_NUMBER=$BUILD_NUMBER."
 echo "BRANCH=$BRANCH."
 
-docker build --no-cache -t kodekonveyor/toolchain:$BUILD_NUMBER .
+docker build -t kodekonveyor/toolchain:$BUILD_NUMBER .
 docker tag kodekonveyor/toolchain:$BUILD_NUMBER kodekonveyor/toolchain:$(echo $BRANCH|sed 'sA/A.Ag')
 
 #docker run --rm -e issuetoken -e sonarkey -e PULL_REQUEST=false -e DEVUID=1000 -e DEVGID=1000 -e ORG_NAME=local -t kodekonveyor/toolchain:$BUILD_NUMBER /usr/local/toolchain/tools/testBuild cdd
