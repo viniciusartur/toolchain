@@ -116,7 +116,7 @@ RUN apt-get update && \
 
 RUN apt-get -y install zenta zenta-tools
 
-COPY rules.java rules.python README.md pmd_rules.xml /usr/local/toolchain/
+COPY rules.java rules.python README.md /usr/local/toolchain/
 COPY inproject /usr/local/toolchain/inproject/
 COPY etc /usr/local/toolchain/etc/
 COPY tools /usr/local/toolchain/tools/
