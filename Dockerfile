@@ -1,36 +1,32 @@
 FROM ubuntu:bionic
 
-RUN apt-get update
-RUN apt-get -y upgrade
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get -y install software-properties-common apt-transport-https && \
+    apt-add-repository -y ppa:openjdk-r/ppa && \
+    until apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EF678DA6D5B1436D3972DFD317BE949418BE5D6B; do echo retrying; done && \
+    echo deb http://repos.demokracia.rulez.org/apt/debian/ master main >/etc/apt/sources.list.d/repos.demokracia.rulez.org.list && \
+    apt-get update && \
+    export DEBIAN_FRONTEND=noninteractive;apt-get -y install openjdk-11-jdk wget git xvfb unzip docbook-xsl make firefox vnc4server\
+        dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil\
+        zip debhelper devscripts maven haveged vim sudo less rsync curl jq python3-pip doxygen && \
+    pip install jira && \
+    pip3 install mutmut doxypypy setuptools wheel twine packaging && \
+    git clone --branch standalone-analysis-java11 https://github.com/magwas/mutation-analysis-plugin.git && \
+	cd mutation-analysis-plugin && \
+	mvn install && \
+        cp ~/.m2/repository/ch/devcon5/sonar/mutation-analysis-plugin/1.3-SNAPSHOT/mutation-analysis-plugin-1.3-SNAPSHOT.jar /usr/local/lib/ && \
+        cd .. ; rm -rf mutation-analysis-plugin && \
+    git clone --branch feature/compile_with_java_11 https://github.com/magwas/xml-doclet.git && \
+        cd xml-doclet/; mvn install && \
+        cd .. ; rm -rf xml-doclet && \
+    sed 's/.ALL:ALL./(ALL) NOPASSWD:/' -i /etc/sudoers 
+RUN apt-get -y install zenta zenta-tools
 
-RUN apt-get -y install software-properties-common apt-transport-https
-RUN apt-add-repository -y ppa:openjdk-r/ppa
-
-RUN until apt-key adv --keyserver keyserver.ubuntu.com --recv EF678DA6D5B1436D3972DFD317BE949418BE5D6B; do echo retrying; done
-RUN echo deb http://repos.demokracia.rulez.org/apt/debian/ master main >/etc/apt/sources.list.d/repos.demokracia.rulez.org.list
-
-RUN apt-get update
-RUN export DEBIAN_FRONTEND=noninteractive;apt-get -y install openjdk-11-jdk wget git xvfb unzip docbook-xsl make firefox vnc4server\
-    dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil\
-    zip debhelper devscripts zenta zenta-tools maven haveged vim sudo less rsync curl jq python3-pip doxygen
-
-RUN pip install jira 
-RUN pip3 install mutmut doxypypy setuptools wheel twine packaging
-
-RUN git clone --branch standalone-analysis-java11 https://github.com/magwas/mutation-analysis-plugin.git; \
-	cd mutation-analysis-plugin;\
-	mvn install;\
-    cp ~/.m2/repository/ch/devcon5/sonar/mutation-analysis-plugin/1.3-SNAPSHOT/mutation-analysis-plugin-1.3-SNAPSHOT.jar /usr/local/lib/;\
-    cd .. ; rm -rf mutation-analysis-plugin
-RUN git clone --branch feature/compile_with_java_11 https://github.com/magwas/xml-doclet.git;\
-    cd xml-doclet/; mvn install;\
-    cd .. ; rm -rf xml-doclet
-
-RUN sed 's/.ALL:ALL./(ALL) NOPASSWD:/' -i /etc/sudoers
-RUN wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz" -O /tmp/eclipse.tar.gz;\
-    cd /opt ; tar xzf /tmp/eclipse.tar.gz;\
-    rm /tmp/eclipse.tar.gz
-RUN /opt/eclipse/eclipse -application org.eclipse.equinox.p2.director\
+RUN wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz" -O /tmp/eclipse.tar.gz && \
+        cd /opt ; tar xzf /tmp/eclipse.tar.gz && \
+        rm /tmp/eclipse.tar.gz && \
+    /opt/eclipse/eclipse -application org.eclipse.equinox.p2.director\
 	-repository http://download.eclipse.org/cft/1.2.0\
 	-repository http://download.eclipse.org/cft/1.2.0/org.eclipse.cft-1.2.0.v201805291812\
 	-repository http://download.eclipse.org/eclipse/updates/4.11\
@@ -113,45 +109,17 @@ RUN /opt/eclipse/eclipse -application org.eclipse.equinox.p2.director\
 	-installIUs org.springframework.tooling.concourse.ls\
 	-installIUs org.springsource.ide.eclipse.commons.quicksearch\
 	-installIUs org.springframework.ide.eclipse.boot.dash\
-	-noSplash
-RUN wget -q https://vorboss.dl.sourceforge.net/project/pydev/pydev/PyDev%207.2.1/PyDev%207.2.1.zip -O /tmp/pydev.zip;\
-    unzip /tmp/pydev.zip -d /opt/eclipse;\
-    rm /tmp/pydev.zip
-RUN wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar;\
+	-noSplash && \
+    wget -q https://vorboss.dl.sourceforge.net/project/pydev/pydev/PyDev%207.2.1/PyDev%207.2.1.zip -O /tmp/pydev.zip && \
+      unzip /tmp/pydev.zip -d /opt/eclipse && \
+      rm /tmp/pydev.zip && \
+    wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar && \
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
-COPY rules.java /usr/local/toolchain/rules.java
-COPY rules.python /usr/local/toolchain/rules.python
-COPY README.md /usr/local/toolchain/README.md
-COPY inproject/shippable.yml /usr/local/toolchain/inproject/shippable.yml
-COPY inproject/tools/testenv /usr/local/toolchain/inproject/testenv
-COPY inproject/functions.local.xslt /usr/local/toolchain/inproject/functions.local.xslt
-COPY inproject/docbook.local.xslt /usr/local/toolchain/inproject/docbook.local.xslt
-COPY etc/m2/settings.xml /usr/local/toolchain/etc/m2/settings.xml
-COPY etc/workbench.xmi /usr/local/toolchain/etc/workbench.xmi
-COPY tools/entrypoint /usr/local/toolchain/tools/entrypoint
-COPY tools/getbranch /usr/local/toolchain/tools/getbranch
-COPY tools/setenv /usr/local/toolchain/tools/setenv
-COPY tools/countTestcases /usr/local/toolchain/tools/countTestcases
-COPY tools/Script /usr/local/toolchain/tools/Script
-COPY tools/code2model /usr/local/toolchain/tools/code2model
-COPY tools/generate_keystore /usr/local/toolchain/tools/generate_keystore
-COPY tools/prepare /usr/local/toolchain/tools/prepare
-COPY tools/environment /usr/local/toolchain/tools/environment
-COPY tools/publish /usr/local/toolchain/tools/publish
-COPY tools/pullanalize /usr/local/toolchain/tools/pullanalize
-COPY tools/getGithubIssues /usr/local/toolchain/tools/getGithubIssues
-COPY tools/orgName /usr/local/toolchain/tools/orgName
-COPY tools/createPypirc /usr/local/toolchain/tools/createPypirc
-COPY tools/makeReport /usr/local/toolchain/tools/makeReport
-COPY tools/pyTestRunner /usr/local/toolchain/tools/pyTestRunner
-COPY tools/pomchecker /usr/local/toolchain/tools/pomchecker
-COPY tools/update-metamodel /usr/local/toolchain/tools/update-metamodel
-COPY tools/pomchecker.xslt /usr/local/toolchain/tools/pomchecker.xslt
-COPY tools/notCreatingDocumentationInPullRequest /usr/local/toolchain/tools/notCreatingDocumentationInPullRequest
-COPY tools/versioncheck.py /usr/local/toolchain/tools/versioncheck.py
-COPY tools/versions.xslt /usr/local/toolchain/tools/versions.xslt
-COPY tools/checkDocErrors /usr/local/toolchain/tools/checkDocErrors
-COPY tools/testBuild /usr/local/toolchain/tools/testBuild
+
+COPY rules.java rules.python README.md /usr/local/toolchain/
+COPY inproject /usr/local/toolchain/inproject/
+COPY etc /usr/local/toolchain/etc/
+COPY tools /usr/local/toolchain/tools/
 COPY pmd /usr/local/toolchain/pmd
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
