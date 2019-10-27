@@ -20,8 +20,10 @@ RUN apt-get update && \
     git clone --branch feature/compile_with_java_11 https://github.com/magwas/xml-doclet.git && \
         cd xml-doclet/; mvn install && \
         cd .. ; rm -rf xml-doclet && \
-    sed 's/.ALL:ALL./(ALL) NOPASSWD:/' -i /etc/sudoers && \
-    wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz" -O /tmp/eclipse.tar.gz && \
+    sed 's/.ALL:ALL./(ALL) NOPASSWD:/' -i /etc/sudoers 
+RUN apt-get -y install zenta zenta-tools
+
+RUN wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz" -O /tmp/eclipse.tar.gz && \
         cd /opt ; tar xzf /tmp/eclipse.tar.gz && \
         rm /tmp/eclipse.tar.gz && \
     /opt/eclipse/eclipse -application org.eclipse.equinox.p2.director\
@@ -113,8 +115,6 @@ RUN apt-get update && \
       rm /tmp/pydev.zip && \
     wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar && \
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
-
-RUN apt-get -y install zenta zenta-tools
 
 COPY rules.java rules.python README.md /usr/local/toolchain/
 COPY inproject /usr/local/toolchain/inproject/
