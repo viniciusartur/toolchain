@@ -1,4 +1,4 @@
-FROM ubuntu:bionic-20191010
+FROM ubuntu:bionic
 
 RUN apt-get update && \
     apt-get -y upgrade && \
@@ -120,6 +120,7 @@ COPY rules.java rules.python README.md pmd_rules.xml /usr/local/toolchain/
 COPY inproject /usr/local/toolchain/inproject/
 COPY etc /usr/local/toolchain/etc/
 COPY tools /usr/local/toolchain/tools/
+COPY pmd /usr/local/toolchain/pmd
 
 ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
 CMD ["/bin/bash"]

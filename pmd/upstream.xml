@@ -5,7 +5,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
 	<description>WAR project PMD rules of Kode Konveyor</description>
-
 	<rule ref="category/java/bestpractices.xml">
 		<exclude name="JUnitAssertionsShouldIncludeMessage" />
 		<exclude name="JUnitTestsShouldIncludeAssert" />
@@ -19,18 +18,14 @@
 		<exclude name="MethodNamingConventions" />
 		<exclude name="AtLeastOneConstructor" />
 		<exclude name="LocalVariableCouldBeFinal" />
+		<exclude name="ClassNamingConventions" />
+		<exclude name="FieldNamingConventions" />
 		<exclude name="GenericsNaming" />
 		<exclude name="OnlyOneReturn" />
 	</rule>
-	<rule ref="category/java/codestyle.xml/MethodNamingConventions">
-		<properties>
-			<property name="junit4TestPattern"
-				value="[a-z][a-zA-Z0-9_]*" />
-		</properties>
-	</rule>
 	<rule ref="category/java/design.xml">
 		<exclude name="LawOfDemeter" />
-		<exclude name="CyclomaticComplexity" />
+		<exclude name="FinalFieldCouldBeStatic" />
 		<exclude name="LoosePackageCoupling" />
 		<exclude name="UseUtilityClass" />
 		<exclude name="DataClass" />
@@ -68,30 +63,6 @@
 	<rule ref="category/java/performance.xml" />
 	<rule ref="category/java/security.xml" />
 
-	<rule name="GenericsNamesShouldBeDescriptive" language="java"
-		message="Generics names should match '[A-Z][a-z0-9]*Type'"
-		class="net.sourceforge.pmd.lang.rule.XPathRule">
-		<description>
-Rule Description
-         </description>
-		<priority>3</priority>
-		<properties>
-			<property name="xpath">
-				<value><![CDATA[
-//TypeDeclaration/ClassOrInterfaceDeclaration/TypeParameters/TypeParameter[
-  not(matches(@Image,'[A-Z][a-z0-9]*Type'))
-]
-]]></value>
-			</property>
-		</properties>
-		<example>
- <![CDATA[
-public interface Matrix<KeyType extends Serializable, ValueType extends Serializable> {
-    // This is ok...
-}
-]]>
-        </example>
-	</rule>
 	<rule
 		ref="category/java/design.xml/SignatureDeclareThrowsException">
 		<properties>
@@ -111,32 +82,4 @@ public interface Matrix<KeyType extends Serializable, ValueType extends Serializ
 				value="^import static.*\*$" />
 		</properties>
 	</rule>
-	<rule name="JUnitTestsShouldIncludeAssert" language="java"
-		message="Junit tests should have checks"
-		class="net.sourceforge.pmd.lang.rule.XPathRule">
-		<!-- externalInfoUrl="TODO" -->
-		<description>
-
-    </description>
-		<priority>3</priority>
-		<properties>
-			<property name="xpath">
-				<value>
-<![CDATA[
-//MethodDeclaration[
-  ./preceding-sibling::Annotation[.//@Image='Test'] and
-  not(
-    .//Name[matches(@Image,'assert')] or
-    .//Name[matches(@Image,'verify')] or
-    .//PrimarySuffix[matches(@Image,'andExpect')]
-  )
-]
-
-]]>
-            </value>
-			</property>
-		</properties>
-		<!--<example><![CDATA[]]></example> -->
-	</rule>
-
 </ruleset>
