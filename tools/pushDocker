@@ -6,3 +6,6 @@ echo "BRANCH=$BRANCH."
 docker push kodekonveyor/toolchain:$BUILD_NUMBER 
 docker push kodekonveyor/toolchain:$(echo $BRANCH|sed 'sA/A.Ag')
 
+docker push kodekonveyor/toolchain-developer:$BUILD_NUMBER
+docker push kodekonveyor/toolchain-developer:$(echo $BRANCH|sed 'sA/A.Ag')
+

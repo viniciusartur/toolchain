@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:bionic as base
 
 RUN apt-get update && \
     apt-get -y upgrade && \
@@ -14,7 +14,20 @@ RUN apt-get update && \
         cd xml-doclet/; mvn install && \
         cd .. ; rm -rf xml-doclet && \
     sed 's/.ALL:ALL./(ALL) NOPASSWD:/' -i /etc/sudoers 
+RUN until apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EF678DA6D5B1436D3972DFD317BE949418BE5D6B; do echo retrying; done && \
+    echo deb http://repos.demokracia.rulez.org/apt/debian/ master main >/etc/apt/sources.list.d/repos.demokracia.rulez.org.list && \
+    apt-get update
+ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
+CMD ["/bin/bash"]
 
+FROM base as build-stage0
+COPY rules.java rules.python README.md /usr/local/toolchain/
+COPY inproject /usr/local/toolchain/inproject/
+COPY etc /usr/local/toolchain/etc/
+COPY tools /usr/local/toolchain/tools/
+COPY pmd /usr/local/toolchain/pmd
+
+FROM base as developer-stage0
 RUN wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz" -O /tmp/eclipse.tar.gz && \
         cd /opt ; tar xzf /tmp/eclipse.tar.gz && \
         rm /tmp/eclipse.tar.gz && \
@@ -107,18 +120,12 @@ RUN wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads
       rm /tmp/pydev.zip && \
     wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar && \
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
+COPY --from=build-stage0 /usr/local/toolchain /usr/local/toolchain/
 
-RUN \
-    until apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EF678DA6D5B1436D3972DFD317BE949418BE5D6B; do echo retrying; done && \
-    echo deb http://repos.demokracia.rulez.org/apt/debian/ master main >/etc/apt/sources.list.d/repos.demokracia.rulez.org.list && \
-    apt-get update && \
-    apt-get -y install zenta zenta-tools
+FROM build-stage0 as build
+RUN apt-get -y install zenta zenta-tools
 
-COPY rules.java rules.python README.md /usr/local/toolchain/
-COPY inproject /usr/local/toolchain/inproject/
-COPY etc /usr/local/toolchain/etc/
-COPY tools /usr/local/toolchain/tools/
-COPY pmd /usr/local/toolchain/pmd
+FROM developer-stage0 as developer
+RUN apt-get -y install zenta zenta-tools
 
-ENTRYPOINT ["/usr/local/toolchain/tools/entrypoint"]
-CMD ["/bin/bash"]
+FROM build
