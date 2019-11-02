@@ -1,12 +1,9 @@
 #!/bin/bash
 normalized_branch=$(echo $HEAD_BRANCH|sed 'sA[/_]A.Ag')
-sonar_uri="https://sonarcloud.io/dashboard?id=$REPO_NAME&branch=$HEAD_BRANCH&resolved=false" 
 repo_uri="https://repo.kodekonveyor.com/$REPO_NAME/$(echo $PULL_REQUEST_REPO_FULL_NAME |sed 'sA/.*AA')/$normalized_branch"
-echo  "building pull request. Sonar and documentation creation are not executed."
-echo  "Sonar analysis at $sonar_uri"
+echo  "building pull request. Documentation creation are not executed."
 echo  "Documentation is at $repo_uri"
 mkdir -p $MODEL_BASENAME
 echo "<html><head><title>Relevant docs</title></head><body>" >$MODEL_BASENAME/index.html
-echo "<a href=\"$sonar_uri\">Sonar analysis</a>" >>$MODEL_BASENAME/index.html
 echo "<a href=\"$repo_uri\">Documentation</a>" >>$MODEL_BASENAME/index.html
 echo "</body></html>" >>$MODEL_BASENAME/index.html

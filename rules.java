@@ -91,9 +91,6 @@ maven-build: $(BEFORE_MAVEN_BUILD)
 
 buildreports: $(BEFORE_BUILDREPORTS) maven
 	zenta-xslt-runner -xsl:xslt/cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml
-	find ~/.m2/repository/org/slf4j/slf4j-api/ -regex .*slf4j-api-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-api.jar \;
-	find ~/.m2/repository/org/slf4j/slf4j-simple/ -regex .*slf4j-simple-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-simple.jar \;
-	java -cp /tmp/slf4j-api.jar:/tmp/slf4j-simple.jar:/usr/local/lib/mutation-analysis-plugin-1.3-SNAPSHOT.jar ch.devcon5.sonar.plugins.mutationanalysis.StandaloneAnalysis
 
 clean: $(BEFORE_CLEAN)
 	git clean -fdx

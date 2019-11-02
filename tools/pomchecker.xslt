@@ -66,7 +66,6 @@
 		zenta:exists('$p1/pom:project/pom:scm/pom:developerConnection') and
 		zenta:exists('$p1/pom:project/pom:scm/pom:url') and
 		zenta:exists('$p1/pom:project/pom:properties') and
-		zenta:exists('$p1/pom:project/pom:properties/pom:sonar.github.repository') and
 		zenta:exists('$p1/pom:project/pom:properties/pom:project.build.sourceEncoding') and
 		zenta:exists('$p1/pom:project/pom:properties/pom:maven.compiler.source') and
 		zenta:exists('$p1/pom:project/pom:properties/pom:maven.compiler.target')
