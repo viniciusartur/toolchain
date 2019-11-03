@@ -9,7 +9,7 @@ copy over the files from the `inproject` folder:
 
 create a Makefile referencing rules.java. See https://github.com/edemo/PDEngine/blob/develop/Makefile for an example.
 
-set the `sonarkey` and `issuetoken` environment variables to your sonar and github oauth token.
+set the `issuetoken` environment variable to your github oauth token.
 probably you want to add them to your .bashrc
 
 # usage
