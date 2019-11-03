@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data xmlns="http://pmd.sourceforge.net/rule-tests"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests http://pmd.sourceforge.net/rule-tests_1_0_0.xsd">
+   <test-code>
+      <description>correct example</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+//@Getter annotation on the class
+@Getter 
+public class TestData {
+    //SCREAMING_SNAKE_CASE fields
+    final String LOGIN_NAME;
+    //methods are public, and look like getters
+    //for screaming snake case fields
+    public String getLOGIN() {
+    }
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>no static fields</description>
+      <expected-problems>1</expected-problems>
+      <expected-linenumbers>3</expected-linenumbers>
+      <code><![CDATA[
+@Getter
+public class TestData {
+    public static  String AUTH0ID;
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>method names should start with get and continue with screaming snake case</description>
+      <expected-problems>1</expected-problems>
+      <expected-linenumbers>3</expected-linenumbers>
+      <code><![CDATA[
+@Getter
+public class TestData {
+        public void setAUTH0ID() {
+        }
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>methods should be public</description>
+      <expected-problems>1</expected-problems>
+      <expected-linenumbers>8</expected-linenumbers>
+      <code><![CDATA[
+//@Getter annotation on the class
+@Getter 
+public class TestData {
+    //SCREAMING_SNAKE_CASE fields
+    final String LOGIN_NAME;
+    //methods are public, and look like getters
+    //for screaming snake case fields
+    String getLOGIN() {
+    }
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+</test-data>

@@ -1,6 +1,11 @@
 #!/bin/bash
 set -xe
 . /usr/local/toolchain/tools/environment
+if [ $IS_PULL_REQUEST = true ]
+then
+    echo "not deploying pull request build"
+    exit 0
+fi
 if [ -f .mutmut-cache ]
 then
     mv -f .mutmut-cache shippable
@@ -8,14 +13,11 @@ fi
 export repo=$(git remote -v|grep "origin.*fetch"|sed 'sA^.*github.com/AA;sA/.*AA;s/^.*://')
 export project=$(git remote -v|grep "origin.*fetch"|sed 'sA.*/AA;sA.git.*AA')
 
-if [ $IS_PULL_REQUEST = true ]
-then
 normalized_branch=$(echo $BRANCH|sed 'sA[/_]A.Ag')
-linkcommanf="ln -s $BUILD_NUMBER $normalized_branch"
-rmcommand="-rm $normalized_branch"
-fi
-
-echo -e "cd /$project/$repo\nput -r shippable $BUILD_NUMBER\n$rmcommand\n$linkcommand" | sftp -b- -oPort=22022 r_$repo@repository.kodekonveyor.com
+rmcommand="cd /$project/$repo\n-rm $normalized_branch"
+echo -e "$rmcommand" | sftp -b- -oPort=22022 r_$repo@repository.kodekonveyor.com
+linkcommand="ln -s $BUILD_NUMBER $normalized_branch"
+echo -e "cd /$project/$repo\nput -r shippable $BUILD_NUMBER\n$linkcommand" | sftp -b- -oPort=22022 r_$repo@repository.kodekonveyor.com
 
 if [ -n "${GIT_TAG}" ]
 then

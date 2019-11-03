@@ -3,7 +3,7 @@
 
 export TOOLCHAINDIR = /usr/local/toolchain
 
-all: $(BEFORE_ALL) install shippable/behaviours.xml pmdcheck coveragecheck
+all: $(BEFORE_ALL) install shippable/behaviours.xml
 
 shippable/behaviours.xml: $(MODEL_BASENAME).rich
 	zenta-xslt-runner -xsl:xslt/generate_behaviours.xslt -s $(MODEL_BASENAME).rich modelbasename=$(MODEL_BASENAME) reponame=$(REPO_NAME) github_org=$(GITHUB_ORGANIZATION)
@@ -13,7 +13,7 @@ inputs/$(MODEL_BASENAME).issues.xml:
 	$(TOOLCHAINDIR)/tools/getGithubIssues >inputs/$(MODEL_BASENAME).issues.xml
 
 
-install: $(BEFORE_INSTALL) pomcheck compile shippable
+install: $(BEFORE_INSTALL) pomcheck compile checks shippable
 	cp -rf $(MODEL_BASENAME)/* target/* shippable
 
 pomcheck:
@@ -22,8 +22,17 @@ pomcheck:
 cpdcheck: javadoc
 	if grep -A 1 "<duplication" target/pmd.xml; then exit 1; fi
 
+checks: pmdcheck coveragecheck
+
 pmdcheck: javadoc
 	if grep -A 1 "<violation" target/pmd.xml; then exit 1; fi
+
+coveragecheck: target/coverage-report
+	if grep ERROR target/coverage-report; then exit 1; fi
+
+target/coverage-report: javadoc maven-build
+	wget https://raw.githubusercontent.com/jacoco/jacoco/master/org.jacoco.report/src/org/jacoco/report/xml/report.dtd -O target/site/jacoco/report.dtd
+	mutations=$$(ls $(PWD)/target/pit-reports/*/mutations.xml);zenta-xslt-runner -xsl:xslt/check_coverage.xslt -s:$$mutations -o:target/coverage-report
 
 shippable:
 	mkdir -p shippable
@@ -85,9 +94,6 @@ maven-build: $(BEFORE_MAVEN_BUILD)
 
 buildreports: $(BEFORE_BUILDREPORTS) maven
 	zenta-xslt-runner -xsl:xslt/cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml
-	find ~/.m2/repository/org/slf4j/slf4j-api/ -regex .*slf4j-api-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-api.jar \;
-	find ~/.m2/repository/org/slf4j/slf4j-simple/ -regex .*slf4j-simple-[0-9.]*.jar -exec ln -f -s {} /tmp/slf4j-simple.jar \;
-	java -cp /tmp/slf4j-api.jar:/tmp/slf4j-simple.jar:/usr/local/lib/mutation-analysis-plugin-1.3-SNAPSHOT.jar ch.devcon5.sonar.plugins.mutationanalysis.StandaloneAnalysis
 
 clean: $(BEFORE_CLEAN)
 	if git clean -ndx|grep "^Would remove src"; then echo  "\n\n----------  WARNING! ---------------\nnot deleting anything: please remove or add the above by hand\n\n";exit 1; fi

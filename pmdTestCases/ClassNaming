@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data xmlns="http://pmd.sourceforge.net/rule-tests"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests http://pmd.sourceforge.net/rule-tests_1_0_0.xsd">
+   <test-code>
+      <description>Stubs</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationStubs {
+  //Stubs class name ends with 'Stubs'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Interface</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationInterface {
+  //Interface class name ends with 'Interface'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Controller</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationController {
+  //Controller class name ends with 'Controller'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Test</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationControllerTest {
+  //Test class name ends with 'Test'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>TestData</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationTestData {
+  //TestData class name ends with 'TestData'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>TestHelper</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationTestHelper {
+  //Test helper class name ends with 'TestHelper'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Entity</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationEntity {
+  //Entity class name ends with 'Entity'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>DTO</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationDTO {
+  //Data Transfer Object class name ends with 'DTO'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Repository</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationRepository {
+  //Repository class name ends with 'Repository'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Factory</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+public class AuthenticationFactory {
+  //Factory class name ends with 'Factory'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Interface class</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+@InterfaceClass
+public class NonStandardClass {
+ // non-standard classes should be marked with @InterfaceClass
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+   <test-code>
+      <description>Delegate</description>
+      <expected-problems>0</expected-problems>
+      <code><![CDATA[
+@Delegate
+public class AuthenticationDelegate {
+  //Delegate class is marked with 'Delegate'
+}
+        ]]></code>
+      <source-type>java 11</source-type>
+   </test-code>
+
+</test-data>
