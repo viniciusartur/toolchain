@@ -2,8 +2,9 @@
 set -xe
 . /usr/local/toolchain/tools/environment
 if [ $IS_PULL_REQUEST = true ]
+then
     echo "not deploying pull request build"
-    exit
+    exit 1
 fi
 if [ -f .mutmut-cache ]
 then
