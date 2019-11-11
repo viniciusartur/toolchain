@@ -5,6 +5,11 @@ echo "BRANCH=$BRANCH."
 source $(dirname $0)/helper
 DOCKER_IMAGE_NAME=$(get_docker_image_from_repo $REPO_FULL_NAME)
 
+if [[ "$IS_PULL_REQUEST" = "true" && "$PULL_REQUEST_REPO_FULL_NAME" != "$REPO_FULL_NAME" ]]; then
+	echo "Not pushing to Docker as PR comes from different repository."
+	exit 0
+fi
+
 docker push $DOCKER_IMAGE_NAME:$BUILD_NUMBER
 docker push $DOCKER_IMAGE_NAME:$(echo $BRANCH|sed 'sA/A.Ag')
 
