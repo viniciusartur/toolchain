@@ -2,10 +2,11 @@
 set -xe
 echo "BUILD_NUMBER=$BUILD_NUMBER."
 echo "BRANCH=$BRANCH."
+DOCKER_REPO_URL=$(echo $REPO_FULL_NAME | tr -d '-')
 
-docker push kodekonveyor/toolchain:$BUILD_NUMBER 
-docker push kodekonveyor/toolchain:$(echo $BRANCH|sed 'sA/A.Ag')
+docker push $DOCKER_REPO_URL:$BUILD_NUMBER
+docker push $DOCKER_REPO_URL:$(echo $BRANCH|sed 'sA/A.Ag')
 
-docker push kodekonveyor/toolchain:developer-$BUILD_NUMBER
-docker push kodekonveyor/toolchain:developer-$(echo $BRANCH|sed 'sA/A.Ag')
+docker push $DOCKER_REPO_URL:developer-$BUILD_NUMBER
+docker push $DOCKER_REPO_URL:developer-$(echo $BRANCH|sed 'sA/A.Ag')
 
