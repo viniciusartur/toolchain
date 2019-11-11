@@ -108,11 +108,13 @@ RUN wget -q "http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads
     wget -q https://projectlombok.org/downloads/lombok.jar -O /usr/local/lib/lombok.jar && \
     java -jar /usr/local/lib/lombok.jar install /opt/eclipse
 
+COPY VERSION /tmp/VERSION
 RUN \
-    until apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EF678DA6D5B1436D3972DFD317BE949418BE5D6B; do echo retrying; done && \
+    . /tmp/VERSION && until apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EF678DA6D5B1436D3972DFD317BE949418BE5D6B; do echo retrying; done && \
     echo deb http://repos.demokracia.rulez.org/apt/debian/ master main >/etc/apt/sources.list.d/repos.demokracia.rulez.org.list && \
+    echo deb http://repos.demokracia.rulez.org/apt/debian/ unstable main >>/etc/apt/sources.list.d/repos.demokracia.rulez.org.list && \
     apt-get update && \
-    apt-get -y install zenta zenta-tools
+    apt-get -y install zenta=$ZENTA_VERSION zenta-tools=$ZENTA_TOOLS_VERSION
 
 COPY rules.java rules.python README.md /usr/local/toolchain/
 COPY inproject /usr/local/toolchain/inproject/

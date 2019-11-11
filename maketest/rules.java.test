@@ -1,0 +1,49 @@
+#!/bin/bash
+set -xe
+
+function testMakeRule () { # target, firstoutput
+	rm -f $1
+	make $1 2>&1 | tee /tmp/foo
+	grep "$2" /tmp/foo
+	[ -a $1 ]
+	make $1 2>&1 | grep "make: '$1' is up to date"
+}
+
+testMakeRule target/pomcheck.ok "checking pom.xml"
+
+testMakeRule target/zentaworkaround.ok "cp /usr/local/toolchain/etc/workbench.xmi ~/.zenta/.metadata/.plugins/org.eclipse.e4.workbench"
+
+testMakeRule target/maven-prepare.ok "BUILD SUCCESS"
+git diff pom.xml |grep version
+git checkout -- pom.xml
+
+testMakeRule target/test-classes/resources/keystore.pk12 "openssl pkcs12 -name KKKeys -export -in selfsigned.crt -inkey selfsigned.key -out keystore.pk12 -passout pass:changeit"
+
+testMakeRule inputs/issues.xml "getGithubIssues"
+
+testMakeRule target/product.war "BUILD SUCCESS"
+for glob in $(cat maketest/maven-build.created)
+do
+	[ -a $glob ]
+done
+
+testMakeRule target/coverage-report "zenta-xslt-runner -xsl:xslt/check_coverage.xslt"
+[ -a target/coverage-report.xml ]
+
+testMakeRule shippable/implementedBehaviours.xml "zenta-xslt-runner -xsl:xslt/generate_implemented_behaviours.xslt"
+[ -a shippable/implementedBehaviours.docbook ]
+[ -a shippable/implementedTestCases.xml ]
+
+testMakeRule taskmarket.consistencycheck "zenta-xslt-runner -xsl:xslt/consistencycheck.xslt"
+[ -a taskmarket.consistency.stderr ]
+
+testMakeRule shippable/behaviours.xml "zenta-xslt-runner -xsl:xslt/generate_behaviours.xslt"
+[ -a shippable/behaviours.txt ]
+
+testMakeRule target/install.ok "cp -r"
+for glob in $(cat maketest/deliverables)
+do
+	[ -a $glob ]
+done
+
+echo all test ran OK

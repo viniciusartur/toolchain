@@ -1,0 +1,15 @@
+target/main.xml
+target/test/javadoc.xml
+target/site/cpd.html
+target/site/project-reports.html
+target/site/jacoco/jacoco.csv
+target/site/jacoco/jacoco-sessions.html
+target/site/jacoco/jacoco.xml
+target/site/jacoco/index.html
+target/site/apidocs/index.html
+target/site/testapidocs/index.html
+target/mutations.xml
+target/pmd.xml
+target/cpd.xml
+target/surefire-reports/TEST-*.xml
+target/production/javadoc.xml
