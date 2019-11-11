@@ -2,12 +2,14 @@
 set -xe
 echo "BUILD_NUMBER=$BUILD_NUMBER."
 echo "BRANCH=$BRANCH."
+source $(dirname $0)/helper
+DOCKER_IMAGE_NAME=$(get_docker_image_from_repo $REPO_FULL_NAME)
 
-docker build -t kodekonveyor/toolchain:$BUILD_NUMBER .
-docker tag kodekonveyor/toolchain:$BUILD_NUMBER kodekonveyor/toolchain:$(echo $BRANCH|sed 'sA/A.Ag')
+docker build -t $DOCKER_IMAGE_NAME:$BUILD_NUMBER .
+docker tag $DOCKER_IMAGE_NAME:$BUILD_NUMBER $DOCKER_IMAGE_NAME:$(echo $BRANCH|sed 'sA/A.Ag')
 
-docker build --target=developer -t kodekonveyor/toolchain:developer-$BUILD_NUMBER .
-docker tag kodekonveyor/toolchain:developer-$BUILD_NUMBER kodekonveyor/toolchain:developer-$(echo $BRANCH|sed 'sA/A.Ag')
+docker build --target=developer -t $DOCKER_IMAGE_NAME:developer-$BUILD_NUMBER .
+docker tag $DOCKER_IMAGE_NAME:developer-$BUILD_NUMBER $DOCKER_IMAGE_NAME:developer-$(echo $BRANCH|sed 'sA/A.Ag')
 
 #docker run --rm -e issuetoken -e PULL_REQUEST=false -e DEVUID=1000 -e DEVGID=1000 -e ORG_NAME=local -t kodekonveyor/toolchain:$BUILD_NUMBER /usr/local/toolchain/tools/testBuild cdd
 #docker run --rm -e issuetoken -e PULL_REQUEST=false -e DEVUID=1000 -e DEVGID=1000 -e ORG_NAME=local -t kodekonveyor/toolchain:$BUILD_NUMBER /usr/local/toolchain/tools/testBuild astinxml

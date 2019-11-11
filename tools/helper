@@ -1,0 +1,5 @@
+#!/bin/bash
+
+function get_docker_image_from_repo {
+	echo $1 | tr -d '-'
+}
