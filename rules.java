@@ -81,8 +81,6 @@ target/maven-prepare.ok: target/.dir $(BEFORE_MAVEN_PREPARE)
 	mvn -B build-helper:parse-version versions:set versions:commit -DnewVersion=\$${parsedVersion.majorVersion}.\$${parsedVersion.minorVersion}.\$${parsedVersion.incrementalVersion}-$$(/usr/local/toolchain/tools/getbranch|sed 'sA/A_Ag').$$(git rev-parse --short HEAD)
 	touch target/maven-prepare.ok
 
-buildreports: $(BEFORE_BUILDREPORTS) maven
-	zenta-xslt-runner -xsl:xslt/cpd2pmd.xslt -s:target/pmd.xml -o target/pmd_full.xml
 
 target/zentaworkaround.ok: target/.dir
 	mkdir -p ~/.zenta/.metadata/.plugins/org.eclipse.e4.workbench/
