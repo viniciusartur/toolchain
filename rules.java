@@ -1,6 +1,5 @@
 export TOOLCHAINDIR = /usr/local/toolchain
 
-CONSISTENCY_INPUTS=taskmarket.rich shippable/behaviours.xml
 
 all: $(BEFORE_ALL) install shippable/behaviours.xml $(AFTER_ALL)
 
